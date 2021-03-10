@@ -59,6 +59,6 @@ public class PlayerController : MonoBehaviour
         {
             cube.transform.position = new Vector3(transform.position.x, cube.transform.position.y, transform.position.z);
         }
-        transform.rotation = m_platform.transform.rotation;
+        transform.rotation = Quaternion.Lerp(transform.rotation, m_platform.transform.rotation, Time.fixedDeltaTime * 3f);
     }
 }
