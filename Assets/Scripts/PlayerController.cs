@@ -54,8 +54,23 @@ public class PlayerController : MonoBehaviour
 
     void Movement(Vector3 direction) 
     {
-        transform.Translate(Vector3.forward * Time.fixedDeltaTime * m_speed + direction);
-        foreach(GameObject cube in Cube.m_cubesList) 
+        Bounds bound = Cube.m_cubesList[0].GetComponent<BoxCollider>().bounds;
+        Vector3 boundPos;
+        Vector3 localDirection = transform.InverseTransformDirection(direction);
+
+        if (localDirection.x > 0f)
+            boundPos = new Vector3(bound.size.x / 2f * m_platform.transform.right.x, 0, bound.size.z * m_platform.transform.right.z);
+        else
+            boundPos = new Vector3(-bound.size.x / 2f* m_platform.transform.right.x, 0, -bound.size.z * m_platform.transform.right.z);
+
+        Vector3 rayDirection =  boundPos + transform.position + m_platform.transform.forward * Time.fixedDeltaTime * m_speed + localDirection;
+
+        if (Physics.Raycast(rayDirection, Vector3.down * 20))
+            transform.Translate(Vector3.forward * Time.fixedDeltaTime * m_speed + direction);
+        else
+            transform.Translate(Vector3.forward * Time.fixedDeltaTime * m_speed);
+
+        foreach (GameObject cube in Cube.m_cubesList) 
         {
             cube.transform.position = new Vector3(transform.position.x, cube.transform.position.y, transform.position.z);
         }
