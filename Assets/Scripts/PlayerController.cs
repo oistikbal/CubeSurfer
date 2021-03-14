@@ -67,6 +67,12 @@ public class PlayerController : MonoBehaviour
 
         if (Physics.Raycast(rayDirection, Vector3.down * 20))
             transform.Translate(Vector3.forward * Time.fixedDeltaTime * m_speed + direction);
+        else if(direction != Vector3.zero)
+        {
+            //need fix
+            Vector3 _direction = new Vector3();
+            transform.Translate(Vector3.forward * Time.fixedDeltaTime * m_speed + _direction);
+        }
         else
             transform.Translate(Vector3.forward * Time.fixedDeltaTime * m_speed);
 
