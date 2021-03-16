@@ -21,8 +21,8 @@ public class Cube : MonoBehaviour
     {
         if (!m_cubesList.Contains(transform.gameObject))
             m_cubesList.Add(transform.gameObject);
-        
-        m_player = GameObject.Find("player");
+
+        m_player = FindObjectOfType<PlayerController>().gameObject;
         m_collider = m_player.GetComponent<BoxCollider>();
     }
 

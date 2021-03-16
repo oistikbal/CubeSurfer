@@ -10,7 +10,7 @@ public class CameraScript : MonoBehaviour
 
     void Start()
     {
-        m_player = GameObject.Find("player");
+        m_player = FindObjectOfType<PlayerController>().gameObject;
         m_hiddenObject = new GameObject();
         m_hiddenObject.transform.position = transform.position;
         m_hiddenObject.transform.rotation = transform.rotation;

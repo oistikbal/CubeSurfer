@@ -17,5 +17,7 @@ public class UIManager : MonoBehaviour
     void OnCollisionObstacle()
     {
 
+        if(Cube.m_cubesList.Count == 0)
+            Time.timeScale = 0f;
     }
 }
