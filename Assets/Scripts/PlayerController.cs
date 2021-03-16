@@ -10,9 +10,11 @@ public class PlayerController : MonoBehaviour
     public float m_speed = 5f;
     public float m_turnSpeed = 3f;
 
+
     void Start()
     {
         m_direction = new Vector3();
+        Cube.m_collisionAddHit += SetPlayer;
     }
 
     void Update()
@@ -54,7 +56,7 @@ public class PlayerController : MonoBehaviour
 
     void Movement(Vector3 direction) 
     {
-        Bounds bound = Cube.m_cubesList[0].GetComponent<BoxCollider>().bounds;
+        Bounds bound = FindObjectOfType<Cube>().GetComponent<BoxCollider>().bounds;
         Vector3 boundPos;
         Vector3 localDirection = transform.InverseTransformDirection(direction);
 
@@ -81,5 +83,14 @@ public class PlayerController : MonoBehaviour
             cube.transform.position = new Vector3(transform.position.x, cube.transform.position.y, transform.position.z);
         }
         transform.rotation = Quaternion.Lerp(transform.rotation, m_platform.transform.rotation, Time.fixedDeltaTime * 3f);
+    }
+
+    void SetPlayer(RaycastHit hit)
+    {
+        transform.position = new Vector3(transform.position.x, hit.point.y + Cube.m_cubesList.Count, transform.position.z);
+        for (int i = 0; i < Cube.m_cubesList.Count; i++)
+        {
+            Cube.m_cubesList[i].transform.position = new Vector3(transform.position.x, hit.collider.transform.position.y + (i + 1), transform.position.z);
+        }
     }
 }
