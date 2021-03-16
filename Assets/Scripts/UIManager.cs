@@ -12,7 +12,6 @@ public class UIManager : MonoBehaviour
 
     void OnCollisionAdd() 
     {
-    
     }
 
     void OnCollisionObstacle()

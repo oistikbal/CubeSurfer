@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
     {
         m_direction = new Vector3();
         Cube.m_collisionAddHit += SetPlayer;
+        Cube.m_collisionObstacleGo += DeleteCube;
+        Cube.m_collisionAdd += AddCube;
     }
 
     void Update()
@@ -80,7 +82,8 @@ public class PlayerController : MonoBehaviour
 
         foreach (GameObject cube in Cube.m_cubesList) 
         {
-            cube.transform.position = new Vector3(transform.position.x, cube.transform.position.y, transform.position.z);
+            if(cube)
+                cube.transform.position = new Vector3(transform.position.x, cube.transform.position.y, transform.position.z);
         }
         transform.rotation = Quaternion.Lerp(transform.rotation, m_platform.transform.rotation, Time.fixedDeltaTime * 3f);
     }
@@ -92,5 +95,19 @@ public class PlayerController : MonoBehaviour
         {
             Cube.m_cubesList[i].transform.position = new Vector3(transform.position.x, hit.collider.transform.position.y + (i + 1), transform.position.z);
         }
+    }
+
+    public void AddCube()
+    {
+        GameObject newCube = Instantiate(FindObjectOfType<Cube>().gameObject, GameObject.Find("player").transform);
+        if (!Cube.m_cubesList.Contains(newCube.transform.gameObject))
+            Cube.m_cubesList.Add(newCube.transform.gameObject);
+    }
+
+    public void DeleteCube(GameObject cube)
+    {
+        cube.transform.parent = null;
+        Cube.m_cubesList.Remove(cube.transform.gameObject);
+        Destroy(cube.transform.gameObject, 2f);
     }
 }

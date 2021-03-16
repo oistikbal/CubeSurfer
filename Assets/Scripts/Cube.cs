@@ -13,15 +13,15 @@ public class Cube : MonoBehaviour
 
     public static event Action m_collisionAdd;
     public static event Action<RaycastHit> m_collisionAddHit;
+
     public static event Action m_collisionObstacle;
+    public static event Action<GameObject> m_collisionObstacleGo;
 
     void Start()
     {
         if (!m_cubesList.Contains(transform.gameObject))
             m_cubesList.Add(transform.gameObject);
-        if (m_collisionAdd == null)
-            m_collisionAdd += AddCube;
-
+        
         m_player = GameObject.Find("player");
         m_collider = m_player.GetComponent<BoxCollider>();
     }
@@ -47,22 +47,8 @@ public class Cube : MonoBehaviour
         else if (other.gameObject.layer == LayerMask.NameToLayer("cube_obstacle"))
         {
             m_collisionObstacle?.Invoke();
-            DeleteCube();
+            m_collisionObstacleGo?.Invoke(gameObject);
         }
     }
 
-    public void AddCube()
-    {
-        GameObject newCube = Instantiate(m_cubePrefab, GameObject.Find("player").transform);
-        if (!m_cubesList.Contains(newCube.transform.gameObject))
-             m_cubesList.Add(newCube.transform.gameObject);
-    }
-
-    public void DeleteCube() 
-    {
-        transform.parent = null;
-        m_cubesList.Remove(transform.gameObject);
-        m_collisionAdd -= AddCube;
-        Destroy(transform.gameObject, 2f);
-    }
 }
