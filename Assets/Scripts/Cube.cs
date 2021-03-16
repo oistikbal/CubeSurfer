@@ -11,11 +11,11 @@ public class Cube : MonoBehaviour
     GameObject m_player;
     BoxCollider m_collider;
 
-    public static event Action m_collisionAdd;
-    public static event Action<RaycastHit> m_collisionAddHit;
+    public static event Action e_collisionAdd;
+    public static event Action<RaycastHit> e_collisionAddHit;
 
-    public static event Action m_collisionObstacle;
-    public static event Action<GameObject> m_collisionObstacleGo;
+    public static event Action e_collisionObstacle;
+    public static event Action<GameObject> e_collisionObstacleGo;
 
     void Start()
     {
@@ -39,15 +39,15 @@ public class Cube : MonoBehaviour
             Physics.SyncTransforms();
             if (Physics.Raycast(m_collider.transform.position, Vector3.down * 20, out hit, 100 , 1 << LayerMask.NameToLayer("platform")))
             {
-                m_collisionAdd?.Invoke();
-                m_collisionAddHit.Invoke(hit);
+                e_collisionAdd?.Invoke();
+                e_collisionAddHit.Invoke(hit);
                 Destroy(other.gameObject);
             }
         }
         else if (other.gameObject.layer == LayerMask.NameToLayer("cube_obstacle"))
         {
-            m_collisionObstacle?.Invoke();
-            m_collisionObstacleGo?.Invoke(gameObject);
+            e_collisionObstacle?.Invoke();
+            e_collisionObstacleGo?.Invoke(gameObject);
         }
     }
 

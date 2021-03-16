@@ -14,9 +14,9 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         m_direction = new Vector3();
-        Cube.m_collisionAddHit += SetPlayer;
-        Cube.m_collisionObstacleGo += DeleteCube;
-        Cube.m_collisionAdd += AddCube;
+        Cube.e_collisionAddHit += SetPlayer;
+        Cube.e_collisionObstacleGo += DeleteCube;
+        Cube.e_collisionAdd += AddCube;
     }
 
     void Update()
@@ -58,6 +58,9 @@ public class PlayerController : MonoBehaviour
 
     void Movement(Vector3 direction) 
     {
+        if (UIManager.m_gameState != UIManager.GameState.PLAYING)
+            return;
+
         Bounds bound = FindObjectOfType<Cube>().GetComponent<BoxCollider>().bounds;
         Vector3 boundPos;
         Vector3 localDirection = transform.InverseTransformDirection(direction);
@@ -108,6 +111,7 @@ public class PlayerController : MonoBehaviour
     {
         cube.transform.parent = null;
         Cube.m_cubesList.Remove(cube.transform.gameObject);
-        Destroy(cube.transform.gameObject, 2f);
+        if (Cube.m_cubesList.Count != 0)
+            Destroy(cube.transform.gameObject, 2f);
     }
 }
